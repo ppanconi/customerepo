@@ -172,7 +172,7 @@ public final class EntityManagerFactoryHolder {
 
     /**
      * Commits a transaction. If no transaction is opened, then this method will
-     * do nothing. If any error occurs during transaction committing then this
+     * only close the entity Manager. If any error occurs during transaction committing then this
      * method will rollback.
      *
      * @throws Exception if exception occurred during transaction committing
@@ -180,12 +180,12 @@ public final class EntityManagerFactoryHolder {
     public static void commitAndCloseTransaction() throws Exception {
         try {
             commitTransaction();
-            closeEntityManager();
         } catch (Exception e) {
             rollbackTransaction();
-            closeEntityManager();
             // rethrow dao exception
             throw e;
+        } finally {
+            closeEntityManager();
         }
     }
 

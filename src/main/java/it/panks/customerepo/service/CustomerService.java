@@ -10,6 +10,8 @@ import static it.panks.customerepo.util.EntityManagerFactoryHolder.*;
 import it.panks.customerepo.model.ClientProspet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -31,7 +33,7 @@ public class CustomerService {
     }
     
     @WebMethod(operationName = "fetchClientProspect")
-    public ClientProspet fetchClientProspect(@WebParam(name = "id") Long id) throws Exception {
+    public ClientProspet fetchClientProspect(@WebParam(name = "id") Long id) throws CrmException {
         
         try {
             beginTransaction();
@@ -41,6 +43,9 @@ public class CustomerService {
             commitTransaction();
 
             return c;
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CrmException(ex.getMessage(), new CrmFault(1, "1"), ex);
         } finally {
             closeEntityManager();
         }
@@ -48,7 +53,7 @@ public class CustomerService {
     
     @WebMethod(operationName = "searchClientProspects")
     public List<ClientProspet> searchClientProspects(@WebParam(name = "name") String name, 
-            @WebParam(name = "surname") String surname) throws Exception {
+            @WebParam(name = "surname") String surname) throws CrmException {
         try {
             beginTransaction();
             List<ClientProspet> l = new ArrayList<>();
@@ -64,6 +69,9 @@ public class CustomerService {
             commitTransaction();
             
             return l;
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CrmException(ex.getMessage(), new CrmFault(2, "2"), ex);
         } finally {
             closeEntityManager();
         }
