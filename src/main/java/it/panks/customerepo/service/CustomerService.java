@@ -24,6 +24,7 @@ import javax.jws.WebParam;
 public class CustomerService {
 
     
+    
     /**
      * This is a sample web service operation
      */
@@ -36,11 +37,14 @@ public class CustomerService {
     public ClientProspet fetchClientProspect(@WebParam(name = "id") Long id) throws CrmException {
         
         try {
+            
+            System.out.print("------------------------- START TRANSACTION >");
             beginTransaction();
 
             ClientProspet c = currentEntityManager().find(ClientProspet.class, id);
-
+//            Thread.sleep(1000);
             commitTransaction();
+            System.out.println("< STOP TRANSACTION -----------------------------");
 
             return c;
         } catch (Exception ex) {
